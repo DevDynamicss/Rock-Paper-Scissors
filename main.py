@@ -11,9 +11,19 @@ def rock_paper_scissors():
 
     while True:
         # Get player choice
-        player_choice = input("\nYour choice: ").lower()
+        player_choice = input("\nYour choice: ").strip().lower()
         if player_choice == 'quit':
             print("\nGame Over!")
+            if rounds == 0:
+                print("You didn't play any rounds. See you next time!")
+            else:
+                print(f"\nFinal Score after {rounds} rounds: You {player_score} - {computer_score} Computer")
+                if player_score > computer_score:
+                    print("Congratulations! You won the game!")
+                elif player_score < computer_score:
+                    print("Sorry, the computer won the game!")
+                else:
+                    print("It's a tie game!")
             break
 
         # Validate input
@@ -39,15 +49,3 @@ def rock_paper_scissors():
 
         rounds += 1
         print(f"Score: You {player_score} - {computer_score} Computer")
-
-    # Final score
-    print(f"\nFinal Score after {rounds} rounds: You {player_score} - {computer_score} Computer")
-    if player_score > computer_score:
-        print("Congratulations! You won the game!")
-    elif player_score < computer_score:
-        print("Sorry, the computer won the game!")
-    else:
-        print("It's a tie game!")
-
-# Run the game
-rock_paper_scissors()
