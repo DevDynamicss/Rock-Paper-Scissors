@@ -1,41 +1,95 @@
 import random
 
-def rock_paper_scissors():
-    print("Welcome to Rock, Paper, Scissors!")
-    print("Enter 'rock', 'paper', or 'scissors'. Type 'quit' to end the game.")
+def predict_player_move(player_moves):
+    """Predict the player's next move based on previous moves."""
+    if not player_moves:
+        return random.choice(['rock', 'paper', 'scissors'])
+    return random.choice(player_moves)  # Simple prediction based on player's history
 
-    # Initialize scores
-    player_score = 0
-    computer_score = 0
+def multiplayer_mode():
+    """Multiplayer mode allowing two players to take turns."""
+    print("Multiplayer Mode: Player 1 vs. Player 2")
+    player1_score, player2_score = 0, 0
     rounds = 0
 
     while True:
-        # Get player choice
-        player_choice = input("\nYour choice: ").strip().lower()
+        print("\nRound", rounds + 1)
+        player1_choice = input("Player 1, enter your choice (rock/paper/scissors or 'quit' to end): ").strip().lower()
+        if player1_choice == 'quit':
+            break
+        
+        player2_choice = input("Player 2, enter your choice (rock/paper/scissors): ").strip().lower()
+
+        if player1_choice not in ['rock', 'paper', 'scissors'] or player2_choice not in ['rock', 'paper', 'scissors']:
+            print("Invalid input! Try again.")
+            continue
+
+        print(f"Player 1 chose: {player1_choice}, Player 2 chose: {player2_choice}")
+
+        if player1_choice == player2_choice:
+            print("It's a tie!")
+        elif (player1_choice == 'rock' and player2_choice == 'scissors') or \
+             (player1_choice == 'scissors' and player2_choice == 'paper') or \
+             (player1_choice == 'paper' and player2_choice == 'rock'):
+            print("Player 1 wins this round!")
+            player1_score += 1
+        else:
+            print("Player 2 wins this round!")
+            player2_score += 1
+
+        rounds += 1
+        print(f"Score: Player 1 {player1_score} - Player 2 {player2_score}")
+
+def rock_paper_scissors():
+    print("Welcome to Rock, Paper, Scissors!")
+    print("Choose a mode: 1. Single Player 2. Multiplayer 3. Quit")
+
+    mode = input("Enter mode (1/2/3): ").strip()
+    if mode == '3':
+        print("Exiting the game. Goodbye!")
+        return
+    
+    if mode == '2':
+        multiplayer_mode()
+        return
+
+    print("Single Player Mode")
+    print("Select difficulty level: 1. Easy 2. Medium 3. Hard")
+    difficulty = input("Enter difficulty (1/2/3): ").strip()
+
+    player_score = 0
+    computer_score = 0
+    rounds = 0
+    player_moves = []
+
+    while True:
+        player_choice = input("\nYour choice (rock/paper/scissors or 'quit' to end): ").strip().lower()
         if player_choice == 'quit':
             print("\nGame Over!")
-            if rounds == 0:
-                print("You didn't play any rounds. See you next time!")
-            else:
-                print(f"\nFinal Score after {rounds} rounds: You {player_score} - {computer_score} Computer")
-                if player_score > computer_score:
-                    print("Congratulations! You won the game!")
-                elif player_score < computer_score:
-                    print("Sorry, the computer won the game!")
-                else:
-                    print("It's a tie game!")
-            break
+            print(f"Final Score: You {player_score} - {computer_score} Computer")
+            return
 
-        # Validate input
         if player_choice not in ['rock', 'paper', 'scissors']:
             print("Invalid choice! Please enter 'rock', 'paper', or 'scissors'.")
             continue
 
-        # Computer choice
-        computer_choice = random.choice(['rock', 'paper', 'scissors'])
+        player_moves.append(player_choice)
+
+        if difficulty == '1':
+            computer_choice = random.choice(['rock', 'paper', 'scissors'])
+        elif difficulty == '2':
+            computer_choice = predict_player_move(player_moves)
+        elif difficulty == '3':
+            # Hard: Counter player's move
+            if player_choice == 'rock':
+                computer_choice = 'paper'
+            elif player_choice == 'paper':
+                computer_choice = 'scissors'
+            else:
+                computer_choice = 'rock'
+
         print(f"Computer chose: {computer_choice}")
 
-        # Determine winner
         if player_choice == computer_choice:
             print("It's a tie!")
         elif (player_choice == 'rock' and computer_choice == 'scissors') or \
@@ -49,3 +103,6 @@ def rock_paper_scissors():
 
         rounds += 1
         print(f"Score: You {player_score} - {computer_score} Computer")
+
+# Run the game
+rock_paper_scissors()
